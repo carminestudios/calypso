@@ -1,0 +1,26 @@
+{
+  "name": "calypso-comms",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-sdk": "^2.543.0",
+    "eslint-config-westlint": "^3.0.1",
+    "ws": "^7.1.2"
+  },
+  "peerDependencies": {
+    "aws-sdk": ">= 2.543.0"
+  },
+  "eslintConfig": {
+    "extends": "westlint",
+    "rules": {
+      "global-require": 0
+    }
+  }
+}
