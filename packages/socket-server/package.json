@@ -1,6 +1,6 @@
 {
   "name": "socket-server",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ws": "^3.2.0"
+    "ws": "^7.1.2"
   }
 }
