@@ -1,0 +1,36 @@
+{
+  "name": "bobcast",
+  "version": "0.0.1",
+  "description": "Conference calls over WebRTC with support for bot participants.",
+  "main": "main.js",
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "start": "watch 'date && npm run build && echo \"Done!\n\n\"' src",
+    "build:min": "npm run build && node_modules/.bin/uglifyjs dist/app.js -c -o dist/app.min.js",
+    "server": "http-server -c-1 -p 8000 dist"
+  },
+  "dependencies": {
+    "preact": "^6.4.0",
+    "preact-compat": "^3.9.2",
+    "preact-redux": "^2.0.0",
+    "react-redux": "^5.0.2",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
+    "socket.io": "^1.7.3",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "crypto": "^1.0.1",
+    "http-server": "^0.9.0",
+    "https-localhost": "^4.4.0",
+    "rollup": "^0.36.3",
+    "rollup-plugin-alias": "^1.2.0",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^5.0.5",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-replace": "^1.1.1",
+    "watch": "^1.0.1"
+  },
+  "author": "Patrik Nyblad",
+  "license": "ISC"
+}
