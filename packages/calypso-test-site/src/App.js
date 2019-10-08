@@ -27,7 +27,8 @@ function App() {
   const wsClientRef = React.useRef(null);
   const [wsLog, setWsLog] = React.useState([]);
   const [rtcLog, setRtcLog] = React.useState([]);
-
+  const [clientId, setClientId] = React.useState('');
+  const [postMessage, setPostMessage] = React.useState('Hello World!');
   const handleConnect = React.useCallback(
     async (event) => {
       event.preventDefault();
@@ -35,18 +36,48 @@ function App() {
       wsClientRef.current = new SignalingHandler(`ws://${window.location.hostname}:8080`);
       wsClientRef.current.connect();
       wsClientRef.current.on('open', () => append(setWsLog, 'Connected'));
-      wsClientRef.current.on('message', (message) =>
-        append(setWsLog, `Received: ${JSON.stringify(message, null, 2)}`),
-      );
+      wsClientRef.current.on('message', (message) => {
+        append(setWsLog, `Received: ${JSON.stringify(message, null, 2)}`);
+        if (message.method === 'peers') {
+          const peers = message.params;
+          const lastPeer = peers[peers.length - 1];
+          if (clientId.length < 1) {
+            setClientId(lastPeer.id);
+          }
+        }
+      });
     },
-    [wsClientRef, setWsLog],
+    [wsClientRef, setWsLog, clientId],
   );
+  const handlePost = React.useCallback((event) => {
+    event.preventDefault();
+    console.log(clientId, postMessage);
+    wsClientRef.current.signal('post', [clientId, postMessage]);
+  }, [clientId, postMessage, wsClientRef]);
+  const handleBroadcast = React.useCallback((event) => {
+    event.preventDefault();
+    console.log(postMessage);
+    wsClientRef.current.signal('broadcast', [postMessage]);
+  }, [postMessage, wsClientRef]);
 
   return (
     <Container>
       <Controls>
         <button onClick={handleConnect} type="button">
           Connect
+        </button>
+        <br />
+        clientId: 
+        <input value={clientId} onChange={(event) => setClientId(event.target.value)} />
+        <br />
+        postMessage: 
+        <input value={postMessage} onChange={(event) => setPostMessage(event.target.value)} />
+        <br />
+        <button onClick={handlePost} type="button">
+          Post
+        </button>
+        <button onClick={handleBroadcast} type="button">
+          Broadcast
         </button>
       </Controls>
       <Output>
