@@ -26,6 +26,6 @@ wss.on('connection', async (wsClient) => {
   console.log('connected', connection);
 
   wsClient.onclose = () => {
-    onDisconnect(connection.id);
+    onDisconnect(wsClient, connection.id);
   };
 });
