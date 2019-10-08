@@ -1,5 +1,6 @@
 const onConnect = require('@carminestudios/calypso-fn-onconnect');
 const onDisconnect = require('@carminestudios/calypso-fn-ondisconnect');
+const onMessage = require('@carminestudios/calypso-fn-onmessage');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const WebSocket = require('ws');
@@ -25,6 +26,9 @@ wss.on('connection', async (wsClient) => {
   const connection = await onConnect(null, { wsClient });
   console.log('connected', connection);
 
+  wsClient.onmessage = (message) => {
+    onMessage(wsClient, message);
+  };
   wsClient.onclose = () => {
     onDisconnect(wsClient, connection.id);
   };

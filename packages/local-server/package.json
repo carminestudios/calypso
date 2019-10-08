@@ -17,7 +17,8 @@
   },
   "peerDependencies": {
     "@carminestudios/calypso-fn-onconnect": "*",
-    "@carminestudios/calypso-fn-ondisconnect": "*"
+    "@carminestudios/calypso-fn-ondisconnect": "*",
+    "@carminestudios/calypso-fn-onmessage": "*"
   },
   "eslintConfig": {
     "extends": "westlint",
