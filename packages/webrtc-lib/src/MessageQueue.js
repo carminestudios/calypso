@@ -1,9 +1,1 @@
-
-
-export class MessageQueue {
-
-
-}
-
-
-export default MessageQueue;
+export class MessageQueue {}

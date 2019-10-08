@@ -1,6 +1,5 @@
-
 export const SIGNALING_EVENTS = {
-	SIGNAL: 'signal',
+  SIGNAL: 'signal',
 };
 
 /**
@@ -16,37 +15,57 @@ export const SIGNALING_EVENTS = {
  * signal handler could not handle by itself.
  */
 export class SignalingHandler {
-	constructor(url, onSignal, onError) {
-		this.url = url;
-		this.socket = null;
-		this.onSignal = onSignal;
-		this.onError = onError;
+  constructor(url) {
+    this.url = url;
+    this.socket = null;
+    this.listeners = {
+      open: [],
+      message: [],
+      error: [],
+    };
+  }
 
-		this.socket = new WebSocket('wss://' + window.location.hostname + ':8443');
-		this.socket.onmessage = (message) => {
-			this.onSignal ? this.onSignal(JSON.parse(message.data)) : undefined;
-		};
-		this.socket.onerror = (error) => {
-			this.onError ? this.onError(error) : undefined;
-		};
-	}
+  connect() {
+    this.socket = new WebSocket(this.url);
+    this.socket.onopen = (...args) => this.onopen(...args);
+    this.socket.onmessage = (...args) => this.onmessage(...args);
+    this.socket.onerror = (...args) => this.onerror(...args);
 
-	joinRoom(roomId) {
-		// this.socket = new WebSocket(url + '/' + roomId);
-	}
+    return Promise.resolve((resolve) => {
+      this.on('open', resolve(this));
+    });
+  }
 
-	leaveRoom() {
-		this.socket.close();
-	}
+  onopen(...args) {
+    this.listeners.open.forEach((listener) => listener(...args));
+  }
 
-	signal(method, params) {
-		const messageObject = {
-			method,
-			params,
-		};
-		this.socket.send(JSON.stringify(messageObject));
-	}
+  onmessage(message) {
+    const data = JSON.parse(message.data);
+    this.listeners.message.forEach((listener) => listener(data));
+  }
 
+  onerror(...args) {
+    this.listeners.error.forEach((listener) => listener(...args));
+  }
+
+  on(eventName, callback) {
+    this.listeners[eventName.toLowerCase()].push(callback);
+  }
+
+  disconnect() {
+    this.socket.close();
+  }
+
+  joinRoom() {}
+
+  leaveRoom() {}
+
+  signal(method, params) {
+    const messageObject = {
+      method,
+      params,
+    };
+    this.socket.send(JSON.stringify(messageObject));
+  }
 }
-
-export default SignalingHandler;

@@ -1,20 +1,19 @@
 {
-  "name": "@carminestudios/calypso-comms",
+  "name": "@carminestudios/calypso-fn-onmessage",
   "private": true,
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "aws-sdk": "^2.543.0",
     "eslint-config-westlint": "^3.0.1"
   },
   "peerDependencies": {
-    "aws-sdk": ">= 2.543.0",
+    "@carminestudios/calypso-comms": "*",
     "@carminestudios/calypso-persistence": "*"
   },
   "eslintConfig": {

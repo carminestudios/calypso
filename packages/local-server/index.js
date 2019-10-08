@@ -1,0 +1,31 @@
+const onConnect = require('@carminestudios/calypso-fn-onconnect');
+const { removeConnection } = require('@carminestudios/calypso-persistence');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const WebSocket = require('ws');
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+
+const HTTPS_PORT = 8443;
+
+// Yes, SSL is required
+const server = https.createServer(
+  {
+    key: fs.readFileSync(path.resolve(__dirname, 'local-key.pem')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'local-cert.pem')),
+  },
+  () => {},
+);
+//server.listen(HTTPS_PORT, '0.0.0.0');
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (wsClient) => {
+  const connection = onConnect(null, { wsClient });
+  console.log('connected', connection);
+
+  // TODO: Replace with onDisconnect
+  wsClient.onclose = () => {
+    removeConnection(connection.id);
+  };
+});

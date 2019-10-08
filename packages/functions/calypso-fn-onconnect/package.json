@@ -1,5 +1,5 @@
 {
-  "name": "calypso-fn-onconnect",
+  "name": "@carminestudios/calypso-fn-onconnect",
   "private": true,
   "version": "1.0.0",
   "description": "",
@@ -11,6 +11,10 @@
   "license": "ISC",
   "devDependencies": {
     "eslint-config-westlint": "^3.0.1"
+  },
+  "peerDependencies": {
+    "@carminestudios/calypso-comms": "*",
+    "@carminestudios/calypso-persistence": "*"
   },
   "eslintConfig": {
     "extends": "westlint",
