@@ -7,7 +7,7 @@ const onConnect = async (wsClient, connectionData) => {
   console.log('connection added');
   await postToConnection(wsClient, {
     peerId: connection.id,
-    message: { method: 'me', params: { id: connection.id } },
+    message: { method: 'me', params: [{ id: connection.id }] },
   });
   const connections = await getConnections();
   const connectionIds = connections.map(connection => ({id: connection.id}));
