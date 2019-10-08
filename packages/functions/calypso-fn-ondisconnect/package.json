@@ -1,22 +1,19 @@
 {
-  "name": "@carminestudios/local-server",
+  "name": "@carminestudios/calypso-fn-ondisconnect",
   "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint-config-westlint": "^3.0.1",
-    "nodemon": "^1.19.3",
-    "ws": "^7.1.2"
+    "eslint-config-westlint": "^3.0.1"
   },
   "peerDependencies": {
-    "@carminestudios/calypso-fn-onconnect": "*",
-    "@carminestudios/calypso-fn-ondisconnect": "*"
+    "@carminestudios/calypso-persistence": "*"
   },
   "eslintConfig": {
     "extends": "westlint",
@@ -25,3 +22,4 @@
     }
   }
 }
+  

@@ -1,5 +1,6 @@
 const onConnect = require('@carminestudios/calypso-fn-onconnect');
-const { removeConnection } = require('@carminestudios/calypso-persistence');
+const onDisconnect = require('@carminestudios/calypso-fn-ondisconnect');
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 const WebSocket = require('ws');
 const fs = require('fs');
@@ -26,6 +27,6 @@ wss.on('connection', (wsClient) => {
 
   // TODO: Replace with onDisconnect
   wsClient.onclose = () => {
-    removeConnection(connection.id);
+    onDisconnect(connection.id);
   };
 });
