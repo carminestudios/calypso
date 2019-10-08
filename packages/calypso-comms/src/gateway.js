@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const { getConnections } = require('@carminestudios/calypso-persistence');
 
 module.exports = {
@@ -10,7 +9,19 @@ module.exports = {
     const connections = await getConnections();
     const connection = connections.find(({ id }) => id === peerId);
     if (connection) {
-      client.postToConnection({ ConnectionId: connection.connectionId, Data: message }).promise();
+      client
+        .PostToConnection({ ConnectionId: connection.connectionId, Data: JSON.stringify(message) })
+        .promise();
     }
+  },
+
+  async broadcast(client, { message }) {
+    const connections = await getConnections();
+    connections.forEach((connection) =>
+      client.PostToConnection({
+        ConnectionId: connection.connectionId,
+        Data: JSON.stringify(message),
+      }),
+    );
   },
 };

@@ -1,0 +1,10 @@
+{
+  "verbose": true,
+  "watch": [
+    ".",
+    "../calypso-comms",
+    "../calypso-persistence",
+    "../functions/calypso-fn-onconnect",
+    "../functions/calypso-fn-onmessage"
+  ]
+}
