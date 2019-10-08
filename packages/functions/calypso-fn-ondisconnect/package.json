@@ -13,6 +13,7 @@
     "eslint-config-westlint": "^3.0.1"
   },
   "peerDependencies": {
+    "@carminestudios/calypso-comms": "*",
     "@carminestudios/calypso-persistence": "*"
   },
   "eslintConfig": {
