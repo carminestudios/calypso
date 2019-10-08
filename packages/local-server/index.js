@@ -21,11 +21,10 @@ const server = https.createServer(
 
 const wss = new WebSocket.Server({ port: 8080 });
 
-wss.on('connection', (wsClient) => {
-  const connection = onConnect(null, { wsClient });
+wss.on('connection', async (wsClient) => {
+  const connection = await onConnect(null, { wsClient });
   console.log('connected', connection);
 
-  // TODO: Replace with onDisconnect
   wsClient.onclose = () => {
     onDisconnect(connection.id);
   };
