@@ -1,0 +1,26 @@
+{
+  "name": "@carminestudios/local-server",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint-config-westlint": "^3.0.1",
+    "nodemon": "^1.19.3",
+    "ws": "^7.1.2"
+  },
+  "peerDependencies": {
+    "@carminestudios/calypso-fn-onconnect": "*"
+  },
+  "eslintConfig": {
+    "extends": "westlint",
+    "rules": {
+      "global-require": 0
+    }
+  }
+}

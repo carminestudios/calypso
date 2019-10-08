@@ -1,14 +1,37 @@
 {
-  "name": "webrtc-lib",
+  "name": "@carminestudios/webrtc-lib",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "build/lib/index.js",
+  "module": "build/es/index.js",
+  "source": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "clean": "./node_modules/.bin/rimraf ./build/*",
+    "build": "yarn clean && yarn build:es2015 && yarn build:es2015modules",
+    "build:es2015": "cross-env NODE_ENV=production babel --config-file ../../babel.lib.config.js ./src --out-dir ./build/lib --copy-files",
+    "build:es2015modules": "cross-env NODE_ENV=production BABEL_ENV=modules babel --config-file ../../babel.lib.config.js ./src --out-dir ./build/es --copy-files",
+    "watch": "cross-env NODE_ENV=development babel -w --config-file ../../babel.lib.config.js ./src --out-dir ./build/lib --copy-files",
+    "watch:modules": "cross-env NODE_ENV=development BABEL_ENV=modules babel -w --config-file ../../babel.lib.config.js ./src --out-dir ./build/es --copy-files"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "uuid": "^3.3.3",
     "ws": "^3.2.0"
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "rimraf": "^3.0.0"
+  },
+  "peerDependencies": {
+    "uuid": ">= 3.3.3",
+    "ws": ">= 3.2.0"
+  },
+  "eslintConfig": {
+    "extends": "westlint",
+    "rules": {
+      "no-underscore-dangle": 0
+    }
   }
 }
