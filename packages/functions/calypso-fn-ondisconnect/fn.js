@@ -10,7 +10,6 @@ const onDisconnect = async (wsClient, connectionId) => {
   await broadcast(wsClient, {
     message: { method: 'peers', params: connectionIds },
   });
-  return Promise.resolve();
 };
 
 module.exports = onDisconnect;
