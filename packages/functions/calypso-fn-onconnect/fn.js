@@ -12,7 +12,7 @@ const onConnect = async (wsClient, connectionData) => {
   const connections = await getConnections();
   const connectionIds = connections.map(connection => ({id: connection.id}));
   await broadcast(wsClient, {
-    message: { method: 'peers', params: connectionIds },
+    message: { method: 'peers', params: [connectionIds] },
   });
   return connection;
 };
