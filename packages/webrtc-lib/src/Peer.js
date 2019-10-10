@@ -74,8 +74,10 @@ export class Peer /* extends EventEmoitter */ {
         params: [this.bobrtc.me.id].concat(params),
       }),
     ];
-    this.bobrtc.notify('message', messageParams);
+    this.bobrtc.signal('message', messageParams);
   }
+
+  // TODO: Need to implement this between peers (no need to implement on the server)
   // request(method, params) {
   // 	// Sends a message to the peer but through the connection server, no sensitive information should be passed through this method.
   // 	const messageData = {
