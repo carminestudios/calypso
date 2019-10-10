@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SignalingHandler } from '@carminestudios/webrtc-lib';
+import { BobRTC } from '@carminestudios/webrtc-lib';
 import Terminal from './Terminal';
 
 const Container = styled.div`
@@ -33,7 +33,8 @@ const WSRTCTestPage = () => {
     async (event) => {
       event.preventDefault();
       append(setWsLog, 'Connecting...');
-      wsClientRef.current = new SignalingHandler(`ws://${window.location.hostname}:8080`);
+      const websocketUrl = `ws://${window.location.hostname}:8080`;
+      wsClientRef.current = new BobRTC(websocketUrl);
       wsClientRef.current.connect();
       wsClientRef.current.on('open', () => append(setWsLog, 'Connected'));
       wsClientRef.current.on('message', (message) => {
