@@ -74,7 +74,7 @@ export class Peer /* extends EventEmoitter */ {
         params: [this.bobrtc.me.id].concat(params),
       }),
     ];
-    this.bobrtc.signal('message', messageParams);
+    this.bobrtc.signal('post', messageParams);
   }
 
   // TODO: Need to implement this between peers (no need to implement on the server)
