@@ -69,10 +69,10 @@ export class Peer /* extends EventEmoitter */ {
     // Sends a message to the peer but through the connection server, no sensitive information should be passed through this method.
     const messageParams = [
       this.id,
-      JSON.stringify({
+      {
         method: `peer:${method}`,
         params: [this.bobrtc.me.id].concat(params),
-      }),
+      },
     ];
     this.bobrtc.signal('post', messageParams);
   }
