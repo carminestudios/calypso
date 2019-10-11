@@ -41,8 +41,8 @@ const WSRTCTestPage = () => {
         append(setWsLog, `Received: ${JSON.stringify(message, null, 2)}`);
         if (message.method === 'peers') {
           const peers = message.params[0];
-          const lastPeer = peers[peers.length - 1];
-          if (clientId.length < 1) {
+          if (peers.length > 0 && clientId.length < 1) {
+            const lastPeer = peers[peers.length - 1];
             setClientId(lastPeer.id);
           }
         }
