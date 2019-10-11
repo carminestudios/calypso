@@ -71,7 +71,13 @@ export class BobRTC /* extends EventEmitter */ {
       try {
         const method = message.method;
         const params = message.params;
-        this._signalingMethods[method].apply(null, params);
+        if (this._signalingMethods[method]) {
+          this._signalingMethods[method].apply(null, params);
+        } else {
+          debugger;
+          // TODO: Found that some messages are received as strings, problem on sending side, server or receiving...?
+          console.log(`Unrecognized method name: ${method}`);
+        }
       } catch (err) {
         console.log(err);
       }
