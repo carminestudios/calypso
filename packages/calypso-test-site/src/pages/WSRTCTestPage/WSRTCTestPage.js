@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SignalingHandler } from '@carminestudios/webrtc-lib';
+import { BobRTC } from '@carminestudios/webrtc-lib';
 import Terminal from './Terminal';
 
 const Container = styled.div`
@@ -33,15 +33,16 @@ const WSRTCTestPage = () => {
     async (event) => {
       event.preventDefault();
       append(setWsLog, 'Connecting...');
-      wsClientRef.current = new SignalingHandler(`ws://${window.location.hostname}:8080`);
+      const websocketUrl = `ws://${window.location.hostname}:8080`;
+      wsClientRef.current = new BobRTC(websocketUrl);
       wsClientRef.current.connect();
       wsClientRef.current.on('open', () => append(setWsLog, 'Connected'));
       wsClientRef.current.on('message', (message) => {
         append(setWsLog, `Received: ${JSON.stringify(message, null, 2)}`);
         if (message.method === 'peers') {
-          const peers = message.params;
-          const lastPeer = peers[peers.length - 1];
-          if (clientId.length < 1) {
+          const peers = message.params[0];
+          if (peers.length > 0 && clientId.length < 1) {
+            const lastPeer = peers[peers.length - 1];
             setClientId(lastPeer.id);
           }
         }

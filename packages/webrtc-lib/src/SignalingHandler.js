@@ -1,18 +1,10 @@
-export const SIGNALING_EVENTS = {
-  SIGNAL: 'signal',
-};
-
 /**
- * SignalingHandler relays information to and from the master server. Signaling
+ * A SignalingHandler relays information to and from the master server. Signaling
  * is just an implementation detail in BobRTC, ours use WebSockets but it can be
  * replaced with your own SignalingHandler that use two monkeys, two tin cans
  * and a string between them.
  *
  * @param url The url where the master server can be reached.
- * @param onSignal Function that will be called whenever we get a signal back
- * from the server.
- * @param onError Function that will be called whenever we get an error that the
- * signal handler could not handle by itself.
  */
 export class SignalingHandler {
   constructor(url) {
@@ -27,25 +19,25 @@ export class SignalingHandler {
 
   connect() {
     this.socket = new WebSocket(this.url);
-    this.socket.onopen = (...args) => this.onopen(...args);
-    this.socket.onmessage = (...args) => this.onmessage(...args);
-    this.socket.onerror = (...args) => this.onerror(...args);
+    this.socket.onopen = (...args) => this._onopen(...args);
+    this.socket.onmessage = (...args) => this._onmessage(...args);
+    this.socket.onerror = (...args) => this._onerror(...args);
 
     return Promise.resolve((resolve) => {
       this.on('open', resolve(this));
     });
   }
 
-  onopen(...args) {
+  _onopen(...args) {
     this.listeners.open.forEach((listener) => listener(...args));
   }
 
-  onmessage(message) {
+  _onmessage(message) {
     const data = JSON.parse(message.data);
     this.listeners.message.forEach((listener) => listener(data));
   }
 
-  onerror(...args) {
+  _onerror(...args) {
     this.listeners.error.forEach((listener) => listener(...args));
   }
 

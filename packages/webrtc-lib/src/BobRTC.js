@@ -1,5 +1,5 @@
 import uuid from 'uuid';
-import { SignalingHandler, SIGNALING_EVENTS } from './SignalingHandler';
+import { SignalingHandler } from './SignalingHandler';
 import MessageQueue from './MessageQueue';
 import { Peer } from './Peer';
 
@@ -46,6 +46,11 @@ export function generateRequestId() {
 export class BobRTC /* extends EventEmitter */ {
   constructor(masterServerURL, signalingHandler) {
     this.masterServerURL = masterServerURL;
+    this.listeners = {
+      open: [],
+      message: [],
+      error: [],
+    };
     this.peers = [];
     this.me = {
       id: null,
@@ -57,27 +62,37 @@ export class BobRTC /* extends EventEmitter */ {
       ? signalingHandler
       : new SignalingHandler(masterServerURL);
 
-    this.signalingHandler.onSignal = (data) => {
+    this.signalingHandler.on('open', (...args) => this._onopen(...args));
+    this.signalingHandler.on('message', (...args) => this._onmessage(...args));
+    this.signalingHandler.on('error', (...args) => this._onerror(...args));
+  
+    this.signalingHandler.on('message', (message) => {
       // Wisper message
       try {
-        const method = data.method;
-        const params = data.params;
-        this._signalingMethods[method].apply(null, params);
+        const method = message.method;
+        const params = message.params;
+        if (this._signalingMethods[method]) {
+          this._signalingMethods[method].apply(null, params);
+        } else {
+          debugger;
+          // TODO: Found that some messages are received as strings, problem on sending side, server or receiving...?
+          console.log(`Unrecognized method name: ${method}`);
+        }
       } catch (err) {
         console.log(err);
       }
 
       // Server says!
       //console.log('Server says: ' + JSON.stringify(data));
-    };
+    });
 
     this._signalingMethods = {
-      me: (info) => {
+      'me': (info) => {
         this.me.id = info.id;
         console.log('My server assigned id is: ', this.me.id);
       },
       // All peers connected to the server at the moment
-      peers: (peers) => {
+      'peers': (peers) => {
         const filteredPeers = peers.filter((peer) => peer.id !== this.me.id);
 
         for (var i = 0; i < filteredPeers.length; i++) {
@@ -131,6 +146,25 @@ export class BobRTC /* extends EventEmitter */ {
     };
   }
 
+  /**
+   * EventEmitter
+   */
+  _onopen(...args) {
+    this.listeners.open.forEach((listener) => listener(...args));
+  }
+
+  _onmessage(...args) {
+    this.listeners.message.forEach((listener) => listener(...args));
+  }
+
+  _onerror(...args) {
+    this.listeners.error.forEach((listener) => listener(...args));
+  }
+
+  on(eventName, callback) {
+    this.listeners[eventName.toLowerCase()].push(callback);
+  }
+
   /*
    * Actions
    */
@@ -177,23 +211,8 @@ export class BobRTC /* extends EventEmitter */ {
    * @param method The name of the RPC method
    * @param data Whatever payload you want to sent to the peer
    */
-  notify(method, data) {
+  signal(method, data) {
     // Sends a message to the connection server, no sensitive information should be passed through this method.
     this.signalingHandler.signal(method, data);
-  }
-
-  /*
-   * Sends an RPC request to the server.
-   * This should be used to send application specific actions.
-   * Should not be used to send chat messages!
-   *
-   * @param method The name of the RPC method
-   * @param data Whatever payload you want to sent to the peer
-   */
-  request(method, data) {
-    // Sends a message to the connection server, no sensitive information should be passed through this method.
-    return new Promise((resolve, reject) => {
-      this.signalingHandler.signal(method, data);
-    });
   }
 }
